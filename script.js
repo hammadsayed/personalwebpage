@@ -80,3 +80,156 @@ links.forEach(link => {
         cursorTrail.style.borderColor = '#bc13fe';
     });
 });
+
+// Cyber Dodge Mini-Game Logic
+const gameCanvas = document.getElementById('game-canvas');
+const gameCtx = gameCanvas.getContext('2d');
+const scoreElement = document.getElementById('score');
+const startBtn = document.getElementById('start-btn');
+const restartBtn = document.getElementById('restart-btn');
+const gameOverScreen = document.getElementById('game-over-screen');
+const finalScoreSpan = document.getElementById('final-score');
+
+// Game State
+let gameRunning = false;
+let score = 0;
+let gameSpeed = 3;
+let player = { x: 0, y: 0, size: 20, color: '#00ff41' };
+let obstacles = [];
+let keys = {};
+
+// Resize canvas to match display size for crisp rendering
+function resizeGameCanvas() {
+    const rect = gameCanvas.getBoundingClientRect();
+    if (rect) {
+        gameCanvas.width = rect.width;
+        gameCanvas.height = rect.height;
+        // Reset player position to bottom center
+        player.y = gameCanvas.height - 40;
+        player.x = gameCanvas.width / 2 - 10;
+    }
+}
+
+window.addEventListener('resize', resizeGameCanvas);
+// Call once to init, but checking if element exists first (it should)
+if (gameCanvas) {
+    resizeGameCanvas();
+}
+
+// Input Handling
+window.addEventListener('keydown', (e) => keys[e.code] = true);
+window.addEventListener('keyup', (e) => keys[e.code] = false);
+
+// Game Functionions
+function spawnObstacle() {
+    const size = Math.random() * 20 + 10;
+    const x = Math.random() * (gameCanvas.width - size);
+    obstacles.push({
+        x: x,
+        y: -size,
+        width: size,
+        height: size,
+        speed: Math.random() * 2 + gameSpeed,
+        color: Math.random() > 0.5 ? '#bc13fe' : '#ff5f56' // Purple or Red
+    });
+}
+
+function updateGame() {
+    if (!gameRunning) return;
+
+    // Move Player
+    if (keys['ArrowLeft'] && player.x > 0) player.x -= 5;
+    if (keys['ArrowRight'] && player.x < gameCanvas.width - player.size) player.x += 5;
+
+    // Spawn Obstacles randomly
+    if (Math.random() < 0.05) spawnObstacle();
+
+    // Update Obstacles
+    for (let i = 0; i < obstacles.length; i++) {
+        let obs = obstacles[i];
+        obs.y += obs.speed;
+
+        // Collision Detection
+        if (
+            player.x < obs.x + obs.width &&
+            player.x + player.size > obs.x &&
+            player.y < obs.y + obs.height &&
+            player.y + player.size > obs.y
+        ) {
+            gameOver();
+            return;
+        }
+
+        // Cleanup and Score
+        if (obs.y > gameCanvas.height) {
+            obstacles.splice(i, 1);
+            i--;
+            score += 10;
+            scoreElement.innerText = `Score: ${score}`;
+
+            // Increase diffculty slightly
+            if (score % 100 === 0) gameSpeed += 0.5;
+        }
+    }
+}
+
+function drawGame() {
+    // Clear
+    gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+    // Draw Player (Triangle for ship look?)
+    gameCtx.fillStyle = player.color;
+    gameCtx.beginPath();
+    gameCtx.moveTo(player.x + player.size / 2, player.y);
+    gameCtx.lineTo(player.x + player.size, player.y + player.size);
+    gameCtx.lineTo(player.x, player.y + player.size);
+    gameCtx.fill();
+
+    // Draw Obstacles (Glitched Rects)
+    obstacles.forEach(obs => {
+        gameCtx.fillStyle = obs.color;
+        gameCtx.fillRect(obs.x, obs.y, obs.width, obs.height);
+
+        // Add random glitch effect
+        if (Math.random() > 0.8) {
+            gameCtx.fillStyle = '#fff';
+            gameCtx.fillRect(obs.x + Math.random() * 5, obs.y, 2, obs.height);
+        }
+    });
+
+    if (gameRunning) requestAnimationFrame(() => {
+        updateGame();
+        drawGame();
+    });
+}
+
+function startGame() {
+    gameRunning = true;
+    score = 0;
+    gameSpeed = 3;
+    obstacles = [];
+    scoreElement.innerText = "Score: 0";
+    gameOverScreen.classList.add('hidden');
+    startBtn.style.display = 'none'; // Hide start button during game
+    resizeGameCanvas(); // Ensure size is correct
+    drawGame();
+}
+
+function gameOver() {
+    gameRunning = false;
+    finalScoreSpan.innerText = score;
+    gameOverScreen.classList.remove('hidden');
+    startBtn.style.display = 'block';
+    startBtn.innerText = "RESTART"; // Just in case, but we have a dedicated reboot button too
+}
+
+if (startBtn) startBtn.addEventListener('click', startGame);
+if (restartBtn) restartBtn.addEventListener('click', startGame);
+
+// Draw initial frame if ready
+if (gameCanvas) {
+    resizeGameCanvas();
+    gameCtx.fillStyle = '#00ff41';
+    gameCtx.font = "20px monospace";
+    gameCtx.fillText("SYSTEM READY...", 50, 50);
+}

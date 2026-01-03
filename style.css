@@ -1,7 +1,9 @@
 :root {
     --bg-color: #0d1117;
-    --text-color: #00ff41; /* Hacker Green */
-    --accent-color: #bc13fe; /* Cyber Purple */
+    --text-color: #00ff41;
+    /* Hacker Green */
+    --accent-color: #bc13fe;
+    /* Cyber Purple */
     --glass-bg: rgba(13, 17, 23, 0.85);
     --font-main: 'Share Tech Mono', monospace;
 }
@@ -10,7 +12,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: none; /* Hide default cursor for custom one */
+    cursor: none;
+    /* Hide default cursor for custom one */
 }
 
 body {
@@ -29,7 +32,8 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: 0.15; /* Subtle background */
+    opacity: 0.15;
+    /* Subtle background */
 }
 
 /* Custom Cursor */
@@ -122,7 +126,8 @@ h2 {
     position: relative;
 }
 
-.glitch::before, .glitch::after {
+.glitch::before,
+.glitch::after {
     content: attr(data-text);
     position: absolute;
     top: 0;
@@ -147,67 +152,147 @@ h2 {
 }
 
 @keyframes glitch-anim-1 {
-    0% { clip: rect(20px, 9999px, 15px, 0); }
-    20% { clip: rect(50px, 9999px, 60px, 0); }
-    40% { clip: rect(10px, 9999px, 90px, 0); }
-    60% { clip: rect(80px, 9999px, 30px, 0); }
-    80% { clip: rect(40px, 9999px, 10px, 0); }
-    100% { clip: rect(60px, 9999px, 70px, 0); }
+    0% {
+        clip: rect(20px, 9999px, 15px, 0);
+    }
+
+    20% {
+        clip: rect(50px, 9999px, 60px, 0);
+    }
+
+    40% {
+        clip: rect(10px, 9999px, 90px, 0);
+    }
+
+    60% {
+        clip: rect(80px, 9999px, 30px, 0);
+    }
+
+    80% {
+        clip: rect(40px, 9999px, 10px, 0);
+    }
+
+    100% {
+        clip: rect(60px, 9999px, 70px, 0);
+    }
 }
 
 @keyframes glitch-anim-2 {
-    0% { clip: rect(10px, 9999px, 80px, 0); }
-    20% { clip: rect(70px, 9999px, 20px, 0); }
-    40% { clip: rect(30px, 9999px, 50px, 0); }
-    60% { clip: rect(90px, 9999px, 10px, 0); }
-    80% { clip: rect(20px, 9999px, 60px, 0); }
-    100% { clip: rect(50px, 9999px, 40px, 0); }
+    0% {
+        clip: rect(10px, 9999px, 80px, 0);
+    }
+
+    20% {
+        clip: rect(70px, 9999px, 20px, 0);
+    }
+
+    40% {
+        clip: rect(30px, 9999px, 50px, 0);
+    }
+
+    60% {
+        clip: rect(90px, 9999px, 10px, 0);
+    }
+
+    80% {
+        clip: rect(20px, 9999px, 60px, 0);
+    }
+
+    100% {
+        clip: rect(50px, 9999px, 40px, 0);
+    }
 }
 
-/* Terminal Window */
-.terminal-window {
-    background: #1e1e1e;
-    border-radius: 6px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    overflow: hidden;
-    margin-top: 20px;
-    border: 1px solid #333;
+/* Game Zone */
+.game-container {
+    position: relative;
+    /* For absolute positioning of UI */
+    width: 100%;
+    max-width: 600px;
+    /* Limit game width */
+    margin: 20px auto;
+    border: 2px solid var(--text-color);
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+    border-radius: 4px;
+    background: #000;
 }
 
-.terminal-header {
-    background: #2d2d2d;
-    padding: 10px;
+#game-canvas {
+    display: block;
+    width: 100%;
+    height: 400px;
+    background: radial-gradient(circle, #0d1117 0%, #000000 100%);
+}
+
+.game-ui {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
     display: flex;
-    align-items: center;
-    border-bottom: 1px solid #333;
+    justify-content: space-between;
+    pointer-events: none;
+    /* Let clicks pass through to canvas if needed, though buttons need events */
 }
 
-.dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 8px;
+#score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 0 0 5px var(--text-color);
 }
 
-.red { background: #ff5f56; }
-.yellow { background: #ffbd2e; }
-.green { background: #27c93f; }
-
-.terminal-header span:last-child {
-    margin-left: 10px;
-    color: #999;
-    font-size: 0.9rem;
-}
-
-.terminal-body {
-    padding: 20px;
-    color: #fff;
-    font-family: 'Courier New', Courier, monospace;
-    min-height: 150px;
-}
-
-#py-output {
+.cyber-btn {
+    pointer-events: auto;
+    background: transparent;
+    border: 1px solid var(--text-color);
     color: var(--text-color);
+    padding: 8px 16px;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    cursor: none;
+    /* We have custom cursor */
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.cyber-btn:hover {
+    background: var(--text-color);
+    color: #000;
+    box-shadow: 0 0 15px var(--text-color);
+}
+
+#game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+#game-over-screen.hidden {
+    display: none;
+}
+
+#game-over-screen h3 {
+    color: #ff5f56;
+    font-size: 3rem;
+    text-shadow: 0 0 20px red;
+    margin-bottom: 20px;
+    animation: glitch-anim-1 2s infinite;
+}
+
+.instructions {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #888;
 }
 
 footer {

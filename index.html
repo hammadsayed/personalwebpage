@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <!-- Google Fonts for that Hacker Vibe -->
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <!-- PyScript Integration (Stable 2024.1.1) -->
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
 </head>
 
 <body>
@@ -35,37 +33,34 @@
         <main>
             <section id="home" class="section">
                 <h1 class="glitch" data-text="SYSTEM ONLINE">SYSTEM ONLINE</h1>
-                <p class="typing-effect">Welcome to my digital workspace.</p>
-                <p> Hello! I am Hammad. I am 13. I build things.</p>
+                <p class="typing-effect">Welcome to my website.</p>
+                <p> Hello! I am Hammad. I am 13 years old. I want to learn programming. </p>
             </section>
 
             <section id="about" class="section">
                 <h2>&gt; About_Me</h2>
                 <div class="card">
                     <p>Status: Learning Python...</p>
-                    <p>Objective: Master the code.</p>
-                    <p>Interests: Web Dev, AI, Gaming.</p>
+                    <p>Objective: I want to build things.</p>
+                    <p>Interests: Development and Gaming.</p>
                 </div>
             </section>
 
-            <section id="python-zone" class="section">
-                <h2>&gt; Python_Terminal</h2>
-                <p>This section runs real Python code in your browser!</p>
-
-                <div class="terminal-window">
-                    <div class="terminal-header">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                        <span>main.py</span>
+            <section id="game-zone" class="section">
+                <h2>&gt; Cyber_Dodge</h2>
+                <div class="game-container">
+                    <canvas id="game-canvas"></canvas>
+                    <div class="game-ui">
+                        <div id="score">Score: 0</div>
+                        <button id="start-btn" class="cyber-btn">START GAME</button>
                     </div>
-                    <div class="terminal-body">
-                        <!-- This is where PyScript output will go -->
-                        <div id="py-output"></div>
-                        <!-- The Python Code -->
-                        <script type="py" src="./main.py"></script>
+                    <div id="game-over-screen" class="hidden">
+                        <h3>SYSTEM FAILURE</h3>
+                        <p>Score: <span id="final-score">0</span></p>
+                        <button id="restart-btn" class="cyber-btn">REBOOT</button>
                     </div>
                 </div>
+                <p class="instructions">Use [LEFT] and [RIGHT] arrows to dodge the bugs.</p>
             </section>
         </main>
 
